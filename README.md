@@ -11,10 +11,10 @@ Enjoy ~
 ## Scripts 目录结构
 
 - `Camera`
-  - `FollowPlayer` 任务的相机跟随
+  - `FollowPlayer` 人物的相机跟随
 - `Player`
   - `PlayerAttack` 人物攻击
-  - `PlayerController` 人物移动移动
+  - `PlayerController` 人物移动
 
 ## Scenes 目录结构
 
