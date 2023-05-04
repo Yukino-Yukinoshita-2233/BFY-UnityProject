@@ -4,7 +4,9 @@ Enjoy ~
 
 ## Assets 目录结构
 
-- `DogKnight` 相关角色模型信息, 包含角色`预制体`,`动作` ,`控制器`等等
+- `DogKnight` 人物模型信息, 包含角色`预制体`,`动作` ,`控制器`等等
+- `MiniLegionGruntPBRHPPolyart` 牛头人模型信息, 包含角色`预制体`,`动作` ,`控制器`等等
+- `MiniLegionRockGolemPBRHPPolyart` 石头人模型信息, 包含角色`预制体`,`动作` ,`控制器`等等
 - `Scenes` 各种游戏场景
 - `Scripts` 各种脚本
 
