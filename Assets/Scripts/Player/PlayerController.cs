@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-  private float speed = 2;
+  private float speed = 1.3f;
   private Animator animator;
   private int speedHash;
   private int isRunHash;
@@ -18,19 +18,23 @@ public class PlayerController : MonoBehaviour
 
   void Update()
   {
-    float horizontal = Input.GetAxis("Horizontal");
-    float vertical = Input.GetAxis("Vertical");
-    Vector3 dir = new Vector3(horizontal, 0, vertical);
-    if (dir != Vector3.zero)
+    var info = animator.GetCurrentAnimatorStateInfo(0);
+    if (!info.IsTag("Attack"))
     {
-      transform.rotation = Quaternion.LookRotation(dir);
-      animator.SetBool(isRunHash, true);
-      animator.SetFloat(speedHash, speed);
-      transform.Translate(Vector3.forward * speed * Time.deltaTime);
-    }
-    else
-    {
-      animator.SetBool(isRunHash, false);
+      float horizontal = Input.GetAxis("Horizontal");
+      float vertical = Input.GetAxis("Vertical");
+      Vector3 dir = new Vector3(horizontal, 0, vertical);
+      if (dir != Vector3.zero)
+      {
+        transform.rotation = Quaternion.LookRotation(dir);
+        animator.SetBool(isRunHash, true);
+        animator.SetFloat(speedHash, speed);
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+      }
+      else
+      {
+        animator.SetBool(isRunHash, false);
+      }
     }
   }
 }

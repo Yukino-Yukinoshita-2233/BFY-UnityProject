@@ -26,7 +26,6 @@ public class PlayerAttack : MonoBehaviour
   {
     if (Input.GetKeyDown(KeyCode.X))
     {
-      var info = animator.GetCurrentAnimatorStateInfo(0);
       // 如果不在攻击状态中，则开始第一次攻击
       if (!isAttacking)
       {
@@ -36,6 +35,9 @@ public class PlayerAttack : MonoBehaviour
 
         // 扣血
 
+        //
+
+        // 启动协程，重置攻击定时器
         StartCoroutine(Timer());
       }
       else
@@ -47,6 +49,8 @@ public class PlayerAttack : MonoBehaviour
           animator.SetInteger(attackHash, 2);
 
           // 扣血
+
+          //
         }
       }
     }
