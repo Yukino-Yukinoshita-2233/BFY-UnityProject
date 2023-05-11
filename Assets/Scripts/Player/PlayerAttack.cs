@@ -24,7 +24,7 @@ public class PlayerAttack : MonoBehaviour
   /// </summary>
   void GetAttack()
   {
-    if (Input.GetKeyDown(KeyCode.X))
+    if (Input.GetMouseButtonDown(0))
     {
       // 如果不在攻击状态中，则开始第一次攻击
       if (!isAttacking)
