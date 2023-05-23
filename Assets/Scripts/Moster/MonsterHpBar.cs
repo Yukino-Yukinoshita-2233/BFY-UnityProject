@@ -32,7 +32,7 @@ public class MonsterHpBar : MonoBehaviour
     //¸úËæ
     void Follow()
     {
-        //MonsterHp.transform.position = Camera.main.WorldToScreenPoint(Monster.transform.position + Vector3.up);
-        MonsterCanvasTranform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward, mainCameraTransform.rotation * Vector3.up);
+        //MonsterCanvasTranform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward, mainCameraTransform.rotation * Vector3.up);
+        MonsterCanvasTranform.LookAt(mainCameraTransform);
     }
 }
