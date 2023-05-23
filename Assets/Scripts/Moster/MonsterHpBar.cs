@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MonsterHpBar : MonoBehaviour
 {
     Transform mainCameraTransform;
-
+    Transform MonsterCanvasTranform;
     Slider Slider1; 
     public float MonsterHP = 100;
         // 让血条始终面向摄像机
@@ -15,6 +15,7 @@ public class MonsterHpBar : MonoBehaviour
     {
         // 获取场景中的 Main Camera 对象的 Transform 组件
         mainCameraTransform = Camera.main.transform;
+        MonsterCanvasTranform = GameObject.Find("MosterCanvas").transform;
         Slider1 = gameObject.GetComponent<Slider>();
     }
 
@@ -32,6 +33,6 @@ public class MonsterHpBar : MonoBehaviour
     void Follow()
     {
         //MonsterHp.transform.position = Camera.main.WorldToScreenPoint(Monster.transform.position + Vector3.up);
-        transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward,mainCameraTransform.rotation * Vector3.up);
+        MonsterCanvasTranform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward,mainCameraTransform.rotation * Vector3.up);
     }
 }
