@@ -5,94 +5,119 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-  bool sword;
-  bool bow;
-  bool watchPotion;
-  bool firePotion;
-  bool grassPotion;
-  bool key;
+    bool sword;
+    bool bow;
+    bool watchPotion;
+    bool firePotion;
+    bool grassPotion;
+    bool key;
 
-  GameObject swordImage;
-  GameObject watchAttributeImage;
-  GameObject fireAttributeImage;
-  GameObject grassAttributeImage;
-  GameObject keyImage;
-  GameObject[] AttributeImage = new GameObject[3];
-
-  int AttributeNum;
-
-  enum BUFF
-  {
-    Fire = 0,
-    Water,
-    Grass
-  };
-
-  private RawImage image;
-  Color Color1 = new Color(1, 1, 1, 1);
-  Color Color2 = new Color(1, 1, 1, 0.3f);
-  void Start()
-  {
-    initialize();
-  }
-
-  void Update()
-  {
-    ChangeAttribute();
-  }
-
-  void initialize()
-  {
-    sword = false;
-    bow = false;
-    watchPotion = false;
-    firePotion = false;
-    grassPotion = false;
-    key = false;
-    AttributeImage[0] = watchAttributeImage = GameObject.Find("Watch");
-    AttributeImage[1] = fireAttributeImage = GameObject.Find("Fire");
-    AttributeImage[2] = grassAttributeImage = GameObject.Find("Grass");
-
-    for (int i = 0; i < 3; i++)
+    public enum BUFF
     {
-      ChangeAlphaValue(AttributeImage[i], false);
+        Water = 0,
+        Fire,
+        Grass,
     }
 
-    swordImage = GameObject.Find("Sword");
-    keyImage = GameObject.Find("Key");
-    ChangeAlphaValue(keyImage, false);
+    GameObject swordImage;
+    GameObject keyImage;
+    Dictionary<BUFF, GameObject> objectDictionary = new Dictionary<BUFF, GameObject>();
+    int AttributeNum;
 
-    AttributeNum = 0;
-  }
+    public BUFF CBuff = BUFF.Water;
+    BUFF oldCBuff;
 
-  void ChangeAlphaValue(GameObject Image, bool isSelect)
-  {
-    image = Image.GetComponent<RawImage>();
-    // Debug.Log(image.color);
-
-    if (isSelect)
-      image.color = Color1;
-    else
-      image.color = Color2;
-    // Debug.Log(image.color);
-  }
-
-  void ChangeAttribute()
-  {
-    if (Input.GetKeyDown(KeyCode.E) & AttributeNum <= 1)
+    private RawImage image; // 图片组件
+    Color Color1 = new Color(1, 1, 1, 1); // 目标透明度值
+    Color Color2 = new Color(1, 1, 1, 0.3f); // 目标透明度值
+    void Start()
     {
-      ChangeAlphaValue(AttributeImage[AttributeNum], false);
-      AttributeNum++;
-      ChangeAlphaValue(AttributeImage[AttributeNum], true);
-      // Debug.Log(AttributeImage[AttributeNum].name + "ON");
+        initialize();
+    }
+
+
+    void Update()
+    {
+        CurrentBuff();//获取输入
+        ChangeAttribute();
 
     }
-    else if (Input.GetKeyDown(KeyCode.E) & AttributeNum == 2)
+
+    //初始化
+    void initialize()
     {
-      ChangeAlphaValue(AttributeImage[AttributeNum], false);
-      AttributeNum = 0;
-      ChangeAlphaValue(AttributeImage[AttributeNum], true);
-      // Debug.Log(AttributeImage[AttributeNum].name + "ON");
+        sword = false;
+        bow = false;
+        watchPotion = false;
+        firePotion = false;
+        grassPotion = false;
+        key = false;
+
+        objectDictionary[BUFF.Water] = GameObject.Find("Water");
+        objectDictionary[BUFF.Fire] = GameObject.Find("Fire");
+        objectDictionary[BUFF.Grass] = GameObject.Find("Grass");
+        ChangeAlphaValue(objectDictionary[BUFF.Water], false);
+        ChangeAlphaValue(objectDictionary[BUFF.Fire], false);
+        ChangeAlphaValue(objectDictionary[BUFF.Grass], false);
+
+        swordImage = GameObject.Find("Sword");
+        keyImage = GameObject.Find("Key");
+        ChangeAlphaValue(keyImage, false);
+
+        AttributeNum = 0;
     }
-  }
+    //修改透明度
+    void ChangeAlphaValue(GameObject Image, bool isSelect)
+    {
+        image = Image.GetComponent<RawImage>();
+        if (isSelect)
+            image.color = Color1;//100%透明度
+        else
+            image.color = Color2;//30%透明度
+
+    }
+
+    void CurrentBuff()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            oldCBuff = CBuff;
+
+            CBuff = BUFF.Water;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            oldCBuff = CBuff;
+
+            CBuff = BUFF.Fire;
+
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            oldCBuff = CBuff;
+
+            CBuff = BUFF.Grass;
+
+        }
+        Debug.Log("CBuff" + CBuff);
+    }
+    //切换属性
+    void ChangeAttribute()
+    {
+        switch (CBuff)
+        {
+            case BUFF.Water:
+                ChangeAlphaValue(objectDictionary[oldCBuff], false);
+                ChangeAlphaValue(objectDictionary[CBuff], true);
+                break;
+            case BUFF.Fire:
+                ChangeAlphaValue(objectDictionary[oldCBuff], false);
+                ChangeAlphaValue(objectDictionary[CBuff], true);
+                break;
+            case BUFF.Grass:
+                ChangeAlphaValue(objectDictionary[oldCBuff], false);
+                ChangeAlphaValue(objectDictionary[CBuff], true);
+                break;
+        }
+    }
 }

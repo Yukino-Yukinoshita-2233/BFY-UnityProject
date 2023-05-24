@@ -7,23 +7,31 @@ public class MonsterHpBar : MonoBehaviour
 {
     Transform mainCameraTransform;
     Transform MonsterCanvasTranform;
-    Slider Slider1; 
+    Slider Slider1;
+
+    [SerializeField]
     public float MonsterHP = 100;
-        // 让血条始终面向摄像机
-    // Start is called before the first frame update
+    MonsterAIControl monsterAIControl;
+
+
+    // 让血条始终面向摄像机
     void Start()
     {
+        MonsterHP = 100;
+        MonsterHP = GetComponent<MonsterAIControl>().Monster_HP;
         // 获取场景中的 Main Camera 对象的 Transform 组件
         mainCameraTransform = Camera.main.transform;
         MonsterCanvasTranform = GameObject.Find("MosterCanvas").transform;
-        Slider1 = gameObject.GetComponent<Slider>();
+        Slider1 = GameObject.Find("MonsterHpBar").gameObject.GetComponent<Slider>();
+
     }
 
-    // Update is called once per frame
     void Update()
     {
+        MonsterHP = GetComponent<MonsterAIControl>().Monster_HP;
+
         Follow();
-        if(Slider1!=null)
+        if (Slider1!=null)
         {
             Slider1.value = MonsterHP * 0.01f;
         }
@@ -33,5 +41,9 @@ public class MonsterHpBar : MonoBehaviour
     void Follow()
     {
         MonsterCanvasTranform.LookAt(mainCameraTransform);
+    }
+    public void GetMonsterHP(float HP)
+    {
+        MonsterHP = HP;
     }
 }
