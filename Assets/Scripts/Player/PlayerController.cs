@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
     transform.Rotate(new Vector3(0f, mouseX, 0f), Space.Self);
 
     mouseY -= Input.GetAxis(GameConstants.MouseAxisNameVertical) * rotationSpeed * Time.deltaTime;
-    mouseY = Mathf.Clamp(mouseY, -50f, 50f);
+    mouseY = Mathf.Clamp(mouseY, -40f, 40f);
     Camera.main.transform.localEulerAngles = new Vector3(mouseY, 0, 0);
 
   }
