@@ -82,24 +82,18 @@ public class InventoryUI : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             oldCBuff = CBuff;
-
             CBuff = BUFF.Water;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             oldCBuff = CBuff;
-
             CBuff = BUFF.Fire;
-
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             oldCBuff = CBuff;
-
             CBuff = BUFF.Grass;
-
         }
-        Debug.Log("CBuff" + CBuff);
     }
     //«–ªª Ù–‘
     void ChangeAttribute()

@@ -263,8 +263,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5304911586177118974}
   - component: {fileID: 4754822569803728767}
-  - component: {fileID: 1041631543694924719}
   - component: {fileID: 7897855597559447538}
+  - component: {fileID: 600412556403111721}
+  - component: {fileID: 1041631543694924719}
   m_Layer: 0
   m_Name: Grunt
   m_TagString: Untagged
@@ -300,7 +301,7 @@ Animator:
   m_GameObject: {fileID: 3155058319838657794}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 406486edf02d8d74da3b2ca225e21254, type: 3}
-  m_Controller: {fileID: 9100000, guid: e58bf4525b7cc80459d6f7ff033ea067, type: 2}
+  m_Controller: {fileID: 9100000, guid: 692f6b3b672c5df489c1b67318651071, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -311,19 +312,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1041631543694924719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3155058319838657794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 972b6567a504a9e43991c571c59b5445, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MonsterHP: 100
 --- !u!136 &7897855597559447538
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -338,6 +326,32 @@ CapsuleCollider:
   m_Height: 0
   m_Direction: 1
   m_Center: {x: 0, y: 1.06, z: 0}
+--- !u!114 &600412556403111721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3155058319838657794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df179cde82f0c9046aaa207fc42c6985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Monster_HP: 100
+--- !u!114 &1041631543694924719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3155058319838657794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 972b6567a504a9e43991c571c59b5445, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MonsterHP: 100
 --- !u!1 &3312486801664689943
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,6 +949,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5304911586177118974}
     m_Modifications:
+    - target: {fileID: 3171544195999933720, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
+      propertyPath: m_Direction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3786578643230443077, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1031,7 +1049,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: MosterCanvas
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6533690789094453816, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
 --- !u!224 &3638975009236997927 stripped
 RectTransform:
