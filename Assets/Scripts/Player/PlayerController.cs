@@ -5,7 +5,7 @@ using Unity.Game.Constants;
 
 public class PlayerController : MonoBehaviour
 {
-  public float rotationSpeed = 200f;
+  public float rotationSpeed = 10f;
   private float moveSpeed = 1.5f;
   private float mouseX;
   private float mouseY;
@@ -33,6 +33,12 @@ public class PlayerController : MonoBehaviour
 
   void Update()
   {
+    HandleMovement();
+    MouseController();
+  }
+
+  void HandleMovement()
+  {
     var info = animator.GetCurrentAnimatorStateInfo(0);
     if (!info.IsTag("Attack"))
     {
@@ -50,18 +56,15 @@ public class PlayerController : MonoBehaviour
         animator.SetBool(isRunHash, false);
       }
     }
-    MouseController();
   }
 
   void MouseController()
   {
-    mouseX = Input.GetAxis(GameConstants.MouseAxisNameHorizontal) * rotationSpeed * Time.deltaTime;
+    mouseX = Input.GetAxis(GameConstants.MouseAxisNameHorizontal) * rotationSpeed * 10 * Time.deltaTime;
     transform.Rotate(new Vector3(0f, mouseX, 0f), Space.Self);
 
-    mouseY -= Input.GetAxis(GameConstants.MouseAxisNameVertical) * rotationSpeed * Time.deltaTime;
+    mouseY -= Input.GetAxis(GameConstants.MouseAxisNameVertical) * rotationSpeed * 10 * Time.deltaTime;
     mouseY = Mathf.Clamp(mouseY, -40f, 40f);
     Camera.main.transform.localEulerAngles = new Vector3(mouseY, 0, 0);
-
   }
-
 }

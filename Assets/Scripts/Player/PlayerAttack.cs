@@ -69,4 +69,14 @@ public class PlayerAttack : MonoBehaviour
     // 重置攻击状态机参数
     animator.SetInteger(attackHash, 0);
   }
+
+  private void OnCollisionEnter(Collision other)
+  {
+    Debug.Log("OnCollisionEnter: " + other.gameObject.name);
+  }
+
+  private void OnTriggerEnter(Collider other)
+  {
+    Debug.Log("OnTriggerEnter: " + other.gameObject.name);
+  }
 }
