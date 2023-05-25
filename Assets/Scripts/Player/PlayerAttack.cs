@@ -7,6 +7,9 @@ public class PlayerAttack : MonoBehaviour
   private Animator animator;
   private int attackHash;
   private bool isAttacking;
+  private float hurt = 10f; // 平A伤害
+  private bool haveMonster = false;
+  private GameObject Monster;
 
   void Start()
   {
@@ -15,14 +18,6 @@ public class PlayerAttack : MonoBehaviour
   }
 
   void Update()
-  {
-    this.GetAttack();
-  }
-
-  /// <summary>
-  /// 获取攻击状态
-  /// </summary>
-  void GetAttack()
   {
     if (Input.GetMouseButtonDown(0))
     {
@@ -34,8 +29,10 @@ public class PlayerAttack : MonoBehaviour
         animator.SetInteger(attackHash, 1);
 
         // 扣血
-
-        //
+        if (haveMonster && Monster != null)
+        {
+          AttackMonster();
+        }
 
         // 启动协程，重置攻击定时器
         StartCoroutine(Timer());
@@ -49,8 +46,10 @@ public class PlayerAttack : MonoBehaviour
           animator.SetInteger(attackHash, 2);
 
           // 扣血
-
-          //
+          if (haveMonster && Monster != null)
+          {
+            AttackMonster();
+          }
         }
       }
     }
@@ -70,13 +69,101 @@ public class PlayerAttack : MonoBehaviour
     animator.SetInteger(attackHash, 0);
   }
 
+  void AttackMonster()
+  {
+    var playerBuff = GetComponentInChildren<InventoryUI>().CBuff;
+    Debug.Log("Player_BUFF: " + playerBuff);
+
+    var monsterBuff = InventoryUI.BUFF.Fire;
+    Debug.Log("Monster_BUFF: " + monsterBuff);
+
+    var monsterHP = Monster.GetComponentInChildren<MonsterHpBar>().MonsterHP;
+
+    switch (monsterBuff)
+    {
+      case InventoryUI.BUFF.Fire:
+        if (playerBuff == InventoryUI.BUFF.Grass)
+        {
+          hurt -= monsterHP * 0.05f;
+        }
+
+        if (playerBuff == InventoryUI.BUFF.Water)
+        {
+          hurt += monsterHP * 0.06f;
+        }
+
+        break;
+
+      case InventoryUI.BUFF.Grass:
+        if (playerBuff == InventoryUI.BUFF.Fire)
+        {
+          hurt += monsterHP * 0.06f;
+        }
+
+        if (playerBuff == InventoryUI.BUFF.Water)
+        {
+          hurt -= monsterHP * 0.05f;
+        }
+
+        break;
+
+      case InventoryUI.BUFF.Water:
+        if (playerBuff == InventoryUI.BUFF.Fire)
+        {
+          hurt -= monsterHP * 0.05f;
+        }
+
+        if (playerBuff == InventoryUI.BUFF.Grass)
+        {
+          hurt += monsterHP * 0.06f;
+        }
+
+        break;
+      default:
+        break;
+    }
+
+    // 血量移除
+    Monster.GetComponentInChildren<MonsterHpBar>().MonsterHP -= hurt;
+  }
+
   private void OnCollisionEnter(Collision other)
   {
-    Debug.Log("OnCollisionEnter: " + other.gameObject.name);
+    if (other.gameObject.CompareTag("Monster"))
+    {
+      Monster = other.gameObject;
+      Debug.Log("OnCollisionEnter: " + Monster.name);
+      haveMonster = true;
+    }
+  }
+
+  private void OnCollisionExit(Collision other)
+  {
+    if (other.gameObject.CompareTag("Monster"))
+    {
+      Monster = null;
+      Debug.Log("OnCollisionExit: " + other.gameObject.name);
+      haveMonster = false;
+    }
   }
 
   private void OnTriggerEnter(Collider other)
   {
-    Debug.Log("OnTriggerEnter: " + other.gameObject.name);
+    if (other.gameObject.CompareTag("Monster"))
+    {
+      Monster = other.gameObject;
+      Debug.Log("OnTriggerEnter: " + Monster.name);
+      haveMonster = true;
+    }
+  }
+
+  private void OnTriggerExit(Collider other)
+  {
+    if (other.gameObject.CompareTag("Monster"))
+    {
+      Monster = null;
+      Debug.Log("OnTriggerExit: " + other.gameObject.name);
+      haveMonster = false;
+    }
   }
 }
