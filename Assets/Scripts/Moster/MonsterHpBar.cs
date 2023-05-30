@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class MonsterHpBar : MonoBehaviour
 {
+    GameObject Monster;
     Transform mainCameraTransform;
     Transform MonsterCanvasTranform;
+    Transform MonsterHPBarTranform;
     Slider Slider1;
 
     [SerializeField]
@@ -18,17 +20,18 @@ public class MonsterHpBar : MonoBehaviour
     void Start()
     {
         MonsterHP = 100;
-        MonsterHP = GetComponent<MonsterAIControl>().Monster_HP;
+        Monster = transform.parent.parent.gameObject;
+        MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
         // 获取场景中的 Main Camera 对象的 Transform 组件
         mainCameraTransform = Camera.main.transform;
-        MonsterCanvasTranform = GameObject.Find("MosterCanvas").transform;
-        Slider1 = GameObject.Find("MonsterHpBar").gameObject.GetComponent<Slider>();
-
+        //MonsterCanvasTranform = GameObject.Find("MosterCanvas").transform;
+        MonsterHPBarTranform = gameObject.transform;
+        Slider1 = gameObject.gameObject.GetComponent<Slider>();
     }
 
     void Update()
     {
-        MonsterHP = GetComponent<MonsterAIControl>().Monster_HP;
+        MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
 
         Follow();
         if (Slider1!=null)
@@ -40,10 +43,12 @@ public class MonsterHpBar : MonoBehaviour
     //跟随
     void Follow()
     {
-        MonsterCanvasTranform.LookAt(mainCameraTransform);
+        //Debug.Log(Monster.name + ": " + "lookat");
+        //MonsterCanvasTranform.LookAt(mainCameraTransform);
+        MonsterHPBarTranform.LookAt(mainCameraTransform);
     }
-    public void GetMonsterHP(float HP)
-    {
-        MonsterHP = HP;
-    }
+    //public void GetMonsterHP(float HP)
+    //{
+    //    MonsterHP = HP;
+    //}
 }
