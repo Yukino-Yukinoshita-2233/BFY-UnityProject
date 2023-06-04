@@ -23,17 +23,16 @@ public enum MonsterAttackState
 
 public class MonsterAIControl : MonoBehaviour
 {
-    float Timer;
+    float PatrolTimer = 0, RevolveTimer = 0, RevolveXTimer = 0, AttackTimer = 0;
     float Monster_RatationSpeed = 200f;
     float Monster_WalkSpeed = 1f;
     float Monster_RunSpeed = 2f;
     int Monster_Life = 1;
     int StateNum;
-
-
+    bool isRevolve = false;
     MonsterState nowMonsterState;
-    MonsterPatrolState monsterPatrolState;
-    MonsterAttackState monsterAttackState;
+    MonsterPatrolState nowMonsterPatrolState;
+    MonsterAttackState nowMonsterAttackState;
     [SerializeField]
     public float Monster_HP = 100;
     Transform Player_Transform, Monster_Transform;
@@ -42,6 +41,10 @@ public class MonsterAIControl : MonoBehaviour
     void Start()
     {
         Monster_HP = 100;
+        PatrolTimer = 0;
+        RevolveTimer = 0;
+        RevolveXTimer = 0;
+        AttackTimer = 0;
         MonsterHpBar monsterHpBar = GetComponent<MonsterHpBar>();
         Player_Transform = GameObject.Find("Player").GetComponent<Transform>();
         Monster_Transform = GetComponent<Transform>();
@@ -49,162 +52,36 @@ public class MonsterAIControl : MonoBehaviour
         Monster_CharacterController = GetComponent<CharacterController>();
         //Monster_IdleState();
         nowMonsterState = MonsterState.Patrol;
+        nowMonsterPatrolState = MonsterPatrolState.Patrol_Idem;
     }
 
     void Update()
     {
-        FindPlayer();
-        SelectState();
+        UpdateState();
     }
-    void SelectState()
+    void UpdateState()
     {
-        switch(nowMonsterState)
+        FindPlayer();
+        switch (nowMonsterState)
         {
             case MonsterState.Patrol:
-                {
-                    Timer += Time.deltaTime;
-
-                    //if (Timer > Random.Range(5, 20))
-                    //{
-                        double Rota = Random.Range(-365, 366) * 0.05;
-                        int Direction = Random.Range(-1, 2);
-
-                    if(Direction==-1)
-                        for (int i=0;i<Random.Range(0,365);i++)
-                            Monster_Transform.eulerAngles += new Vector3(0, -1 * 1, 0);
-                    else if(Direction == 1)
-                        for (int i = 0; i < Random.Range(0, 365); i+= (int)Time.deltaTime)
-                            Monster_Transform.eulerAngles += new Vector3(0, 1 * 1, 0);
-
-                    //Timer = 0;
-
-                    //}
-
-                    if (Timer > Random.Range(5, 20))
-                    {
-                        switch (Random.Range(1, 4))
-                        {
-                            case 1:
-                                Monster_IdleState();
-                                break;
-                            case 2:
-                                Monster_WalkState();
-                                break;
-                            case 3:
-                                Monster_RunState();
-                                break;
-                        }
-                        Timer = 0;
-                    }
-                }
+                Monster_Patrol();
                 break;
             case MonsterState.Track:
-                {
-                    Monster_TrackState();
-                }
+                Monster_TrackState();
                 break;
             case MonsterState.Attack:
-                {
-                    Timer += Time.deltaTime;
-                    if (Timer > 2)
-                    {
-                        int x = Random.Range(0, 3);
-                        //Debug.Log(x);
-                        if (x == 1)
-                        {
-                            monsterAttackState = MonsterAttackState.Attack_Attack01;
-                            Monster_Attack01();
-                        }
-                        else
-                        {
-                            monsterAttackState = MonsterAttackState.Attack_Attack02;
-                            Monster_Attack02();
-                        }
-                        Timer = 0;
-                    }
-
-                }
+                Monster_Attack();
                 break;
             case MonsterState.Die:
                 Monster_DieState();
-
                 break;
         }
     }
-    
-    void UpdateState()
-    {/*
 
-
-        if (nowMonsterState == MonsterState.Die)
-        {
-            Monster_DieState();
-        }
-        if (nowMonsterState == MonsterState.Attack)
-        {
-            Timer += Time.deltaTime;
-            if (Timer>2)
-            {
-                Timer = 0;
-
-                int x = Random.Range(0, 3);
-                //Debug.Log(x);
-                if (x == 1)
-                {
-                    monsterAttackState = MonsterAttackState.Attack_Attack01;
-                    Monster_Attack01();
-                }
-                else
-                {
-                    monsterAttackState = MonsterAttackState.Attack_Attack02;
-                    Monster_Attack02();
-                }
-                Timer = 0;
-            }
-        }
-        else if(nowMonsterState == MonsterState.Patrol)
-        {
-            Timer += Time.deltaTime;
-            switch (Random.Range(1, 4))
-            {
-                case 1:
-                    Monster_IdleState();
-                    break;
-                case 2:
-                    Monster_WalkState();
-                    break;
-                case 3:
-                    Monster_RunState();
-                    break;
-            }
-            if (Timer > Random.Range(5, 30))
-            {
-                switch (Random.Range(1, 4))
-                {
-                    case 1:
-                        Monster_IdleState();
-                        break;
-                    case 2:
-                        Monster_WalkState();
-                        break;
-                    case 3:
-                        Monster_RunState();
-                        break;
-                }
-
-            }
-
-        }
-        else if(nowMonsterState == MonsterState.Track)
-        {
-
-        }
-    */
-    }
-    
     void FindPlayer()
     {
-        if ((Monster_Transform.position - Player_Transform.position).magnitude >= Vector3.one.magnitude * 2 && (Monster_Transform.position - Player_Transform.position).magnitude < Vector3.one.magnitude * 4 && nowMonsterState != MonsterState.Die)
+        if ((Monster_Transform.position - Player_Transform.position).magnitude >= Vector3.one.magnitude * 2 && (Monster_Transform.position - Player_Transform.position).magnitude < Vector3.one.magnitude * 5 && nowMonsterState != MonsterState.Die)
         {
             nowMonsterState = MonsterState.Track;
         }
@@ -217,63 +94,143 @@ public class MonsterAIControl : MonoBehaviour
             nowMonsterState = MonsterState.Patrol;
         }
     }
-    public void Monster_TrackState()
-    {
-        Monster_Transform.LookAt(Player_Transform);
-        Vector3 dir = new Vector3(0, 0, 1.50f);
-        Monster_CharacterController.Move(transform.rotation * dir * Monster_RunSpeed * Time.deltaTime);
 
-        Debug.Log("Monster_TrackState");
+
+    public void Monster_Patrol()
+    {
+        PatrolTimer += Time.deltaTime;
+
+        if (PatrolTimer > Random.Range(5, 20))
+        {
+            switch (Random.Range(1, 4))
+            {
+                case 1:
+                    nowMonsterPatrolState = MonsterPatrolState.Patrol_Idem;
+                    break;
+                case 2:
+                    nowMonsterPatrolState = MonsterPatrolState.Patrol_Walk;
+                    break;
+                case 3:
+                    nowMonsterPatrolState = MonsterPatrolState.Patrol_Run;
+                    break;
+            }
+            PatrolTimer = 0;
+        }
+        switch (nowMonsterPatrolState)
+        {
+            case MonsterPatrolState.Patrol_Idem:
+                Monster_IdleState();
+                break;
+            case MonsterPatrolState.Patrol_Walk:
+                Monster_WalkState();
+                break;
+            case MonsterPatrolState.Patrol_Run:
+                Monster_RunState();
+                break;
+        }
 
     }
 
+    public void Monster_RevolveState()
+    {
+        Debug.Log("Monster_RevolveState");
+        RevolveTimer += Time.deltaTime;
+        if (RevolveTimer > Random.Range(10, 20))
+        {
+            isRevolve = true;
+            RevolveXTimer = Random.Range(-365, 366);
+            RevolveTimer = 0;
+        }
+        if (isRevolve == true)
+        {
+
+            while(RevolveXTimer >= 0)
+            {
+
+                RevolveXTimer -= Time.deltaTime;
+            }
+            isRevolve = false;
+        }
+
+    }
+    public void Monster_TrackState()
+    {
+        //Debug.Log("Monster_TrackState");
+        Monster_Transform.LookAt(Player_Transform);
+        Vector3 dir = new Vector3(0, 0, 1f);
+        Monster_CharacterController.Move(transform.rotation * dir * Monster_RunSpeed * Time.deltaTime);
+        SetAnimationStates(false, false, false, true);
+
+    }
     public void Monster_IdleState()
     {
-        Debug.Log("Monster_IdleState");
-        Monster_animator.SetBool("isIdle", true);
-
+        //Debug.Log("Monster_IdleState");
+        SetAnimationStates(true, false, false, false);
     }
     public void Monster_WalkState()
     {
-        Debug.Log("Monster_WalkState");
-        Vector3 dir = new Vector3(0, 0, 1);
+        //Debug.Log("Monster_WalkState");
+        Vector3 dir = new Vector3(0, 0, 1f);
         Monster_CharacterController.Move(transform.rotation * dir * Monster_WalkSpeed * Time.deltaTime);
-        Monster_animator.SetBool("isWalk", true);
-
+        SetAnimationStates(false, true, false, false);
     }
     void Monster_RunState()
     {
-        Debug.Log("Monster_RunState");
-        Vector3 dir = new Vector3(0, 0, 1.50f);
+        //Debug.Log("Monster_RunState");
+        Vector3 dir = new Vector3(0, 0, 1f);
         Monster_CharacterController.Move(transform.rotation * dir * Monster_RunSpeed * Time.deltaTime);
-        Monster_animator.SetBool("isRun", true);
-
+        SetAnimationStates(false, false, true, false);
+    }
+    void Monster_Attack()
+    {
+        AttackTimer += Time.deltaTime;
+        if (AttackTimer > 2)
+        {
+            int x = Random.Range(0, 3);
+            //Debug.Log(x);
+            if (x == 1)
+            {
+                nowMonsterAttackState = MonsterAttackState.Attack_Attack01;
+                Monster_Attack01();
+            }
+            else
+            {
+                nowMonsterAttackState = MonsterAttackState.Attack_Attack02;
+                Monster_Attack02();
+            }
+            AttackTimer = 0;
+        }
     }
     void Monster_Attack01()
     {
-        Debug.Log("Monster_Attack01");
-        Monster_animator.SetBool("isAttack01", true);
+        //Debug.Log("Monster_Attack01");
+        Monster_animator.SetTrigger("isAttack01");
 
     }
     void Monster_Attack02()
     {
-        Debug.Log("Monster_Attack02");
-
-        Monster_animator.SetBool("isAttack02", true);
+        //Debug.Log("Monster_Attack02");
+        Monster_animator.SetTrigger("isAttack02");
 
     }
     void Monster_GetHitState()
     {
-        Debug.Log("Monster_GetHitState");
-        Monster_animator.SetBool("isGetHit", true);
+        //Debug.Log("Monster_GetHitState");
+        Monster_animator.SetTrigger("isGetHit");
     }
     void Monster_DieState()
     {
-        Debug.Log("Monster_DieState");
-        Monster_animator.SetBool("isDie", true);
+        //Debug.Log("Monster_DieState");
+        Monster_animator.SetTrigger("isDie");
         float delay = 5.0f; // 延迟时间（以秒为单位）
         GameObject.Destroy(gameObject, delay);
     }
-
+    public void SetAnimationStates(bool isIdle, bool isWalk, bool isRun, bool isTrack)
+    {   
+        Monster_animator.SetBool("isIdle", isIdle);
+        Monster_animator.SetBool("isWalk", isWalk);
+        Monster_animator.SetBool("isRun", isRun);
+        Monster_animator.SetBool("isTrack", isTrack);
+    }
 }
 

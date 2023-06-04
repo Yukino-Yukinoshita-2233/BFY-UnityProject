@@ -5,23 +5,23 @@ using UnityEngine.UI;
 
 public class MonsterHpBar : MonoBehaviour
 {
-    GameObject Monster;
+    //GameObject Monster;
     Transform mainCameraTransform;
     Transform MonsterCanvasTranform;
     Transform MonsterHPBarTranform;
-    Slider Slider1;
 
     [SerializeField]
-    public float MonsterHP = 100;
-    MonsterAIControl monsterAIControl;
+    //Slider Slider1;
+    //public float MonsterHP = 100;
+    //MonsterAIControl monsterAIControl;
 
 
     // 让血条始终面向摄像机
     void Start()
     {
-        MonsterHP = 100;
-        Monster = transform.parent.parent.gameObject;
-        MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
+        //MonsterHP = 100;
+        //Monster = transform.parent.parent.gameObject;
+        //MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
         // 获取场景中的 Main Camera 对象的 Transform 组件
         mainCameraTransform = Camera.main.transform;
         //MonsterCanvasTranform = GameObject.Find("MosterCanvas").transform;
@@ -31,13 +31,10 @@ public class MonsterHpBar : MonoBehaviour
 
     void Update()
     {
-        MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
+        //MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
 
         Follow();
-        if (Slider1!=null)
-        {
-            Slider1.value = MonsterHP * 0.01f;
-        }
+c
         
     }
     //跟随

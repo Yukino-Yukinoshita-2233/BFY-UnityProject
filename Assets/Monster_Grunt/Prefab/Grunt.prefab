@@ -297,6 +297,7 @@ GameObject:
   - component: {fileID: 7897855597559447538}
   - component: {fileID: 600412556403111721}
   - component: {fileID: 3625087301065790245}
+  - component: {fileID: 3618480941201857206}
   m_Layer: 0
   m_Name: Grunt
   m_TagString: Monster
@@ -389,6 +390,19 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3618480941201857206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3155058319838657794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc9442f31c04c8540aa92fed7da66ace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MonsterHP: 100
 --- !u!1 &3312486801664689943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,6 +1099,10 @@ PrefabInstance:
     - target: {fileID: 7689059642241602119, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
       propertyPath: m_Name
       value: MosterCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335340669734180787, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6533690789094453816, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
