@@ -5,30 +5,21 @@ using UnityEngine.UI;
 
 public class MonsterHp : MonoBehaviour
 {
-    [SerializeField]
-    GameObject Monster;
-    Slider Slider1;
-    public float MonsterHP = 100;
-    MonsterAIControl monsterAIControl;
+  [SerializeField]
+  Slider Slider1;
+  public float MonsterHP { get; set; } = 100;
 
-    // Start is called before the first frame update
-    void Start()
+  void Start()
+  {
+    Slider1 = gameObject.gameObject.GetComponent<Slider>();
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+    if (Slider1 != null)
     {
-        MonsterHP = 100;
-        Monster = transform.parent.parent.gameObject;
-        MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
-
+      Slider1.value = MonsterHP * 0.01f;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
-
-        if (Slider1 != null)
-        {
-            Slider1.value = MonsterHP * 0.01f;
-        }
-
-    }
+  }
 }

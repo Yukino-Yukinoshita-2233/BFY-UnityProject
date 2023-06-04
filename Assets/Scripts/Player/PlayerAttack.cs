@@ -144,11 +144,11 @@ public class PlayerAttack : MonoBehaviour
     foreach (var item in monsterList)
     {
       // 添加BUFF
-      var monsterHP = item.GetComponentInChildren<MonsterHpBar>().MonsterHP;
+      var monsterHP = item.GetComponentInChildren<MonsterHp>().MonsterHP;
       SelectBuff(monsterHP);
 
       // 血量移除
-      item.GetComponentInChildren<MonsterHpBar>().MonsterHP -= hurt;
+      item.GetComponentInChildren<MonsterHp>().MonsterHP -= hurt;
 
       Debug.Log("Hurt:" + hurt);
       Debug.Log("MonsterHP:" + monsterHP);

@@ -5,47 +5,45 @@ using UnityEngine.UI;
 
 public class MonsterHpBar : MonoBehaviour
 {
-    //GameObject Monster;
-    Transform mainCameraTransform;
-    Transform MonsterCanvasTranform;
-    Transform MonsterHPBarTranform;
+  //GameObject Monster;
+  Transform mainCameraTransform;
+  Transform MonsterCanvasTranform;
+  Transform MonsterHPBarTranform;
 
-    [SerializeField]
-    //Slider Slider1;
-    //public float MonsterHP = 100;
-    //MonsterAIControl monsterAIControl;
+  [SerializeField]
+  //Slider Slider1;
+  //public float MonsterHP = 100;
+  //MonsterAIControl monsterAIControl;
 
 
-    // ÈÃÑªÌõÊ¼ÖÕÃæÏòÉãÏñ»ú
-    void Start()
-    {
-        //MonsterHP = 100;
-        //Monster = transform.parent.parent.gameObject;
-        //MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
-        // »ñÈ¡³¡¾°ÖĞµÄ Main Camera ¶ÔÏóµÄ Transform ×é¼ş
-        mainCameraTransform = Camera.main.transform;
-        //MonsterCanvasTranform = GameObject.Find("MosterCanvas").transform;
-        MonsterHPBarTranform = gameObject.transform;
-        Slider1 = gameObject.gameObject.GetComponent<Slider>();
-    }
+  // è®©è¡€æ¡å§‹ç»ˆé¢å‘æ‘„åƒæœº
+  void Start()
+  {
+    //MonsterHP = 100;
+    //Monster = transform.parent.parent.gameObject;
+    //MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
+    // è·å–åœºæ™¯ä¸­çš„ Main Camera å¯¹è±¡çš„ Transform ç»„ä»¶
+    mainCameraTransform = Camera.main.transform;
+    //MonsterCanvasTranform = GameObject.Find("MosterCanvas").transform;
+    MonsterHPBarTranform = gameObject.transform;
+  }
 
-    void Update()
-    {
-        //MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
+  void Update()
+  {
+    //MonsterHP = Monster.GetComponent<MonsterAIControl>().Monster_HP;
 
-        Follow();
-c
-        
-    }
-    //¸úËæ
-    void Follow()
-    {
-        //Debug.Log(Monster.name + ": " + "lookat");
-        //MonsterCanvasTranform.LookAt(mainCameraTransform);
-        MonsterHPBarTranform.LookAt(mainCameraTransform);
-    }
-    //public void GetMonsterHP(float HP)
-    //{
-    //    MonsterHP = HP;
-    //}
+    Follow();
+
+  }
+  //è·Ÿéš
+  void Follow()
+  {
+    //Debug.Log(Monster.name + ": " + "lookat");
+    //MonsterCanvasTranform.LookAt(mainCameraTransform);
+    MonsterHPBarTranform.LookAt(mainCameraTransform);
+  }
+  //public void GetMonsterHP(float HP)
+  //{
+  //    MonsterHP = HP;
+  //}
 }
