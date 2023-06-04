@@ -7,9 +7,12 @@ public class PlayerAttack : MonoBehaviour
   private Animator animator;
   private int attackHash;
   private bool isAttacking;
-  private float hurt = 10f; // 平A伤害
+  private float hurt = 10f; // 平A基础伤害
+  private float hurtbuff = 0.06f; // 平A加成
+  private float hurtdebuff = 0.05f; // 平A削减
+  private float attackDistance = 30f; // 平A距离
+  private float attackRadius = 20f; // 平A范围
   private bool haveMonster = false;
-  private GameObject Monster;
 
   void Start()
   {
@@ -28,11 +31,8 @@ public class PlayerAttack : MonoBehaviour
         // 播放第一次攻击动画
         animator.SetInteger(attackHash, 1);
 
-        // 扣血
-        if (haveMonster && Monster != null)
-        {
-          AttackMonster();
-        }
+        // 攻击
+        SelectMonster();
 
         // 启动协程，重置攻击定时器
         StartCoroutine(Timer());
@@ -45,11 +45,8 @@ public class PlayerAttack : MonoBehaviour
           // 播放第二次攻击动画
           animator.SetInteger(attackHash, 2);
 
-          // 扣血
-          if (haveMonster && Monster != null)
-          {
-            AttackMonster();
-          }
+          // 攻击
+          SelectMonster();
         }
       }
     }
@@ -69,7 +66,10 @@ public class PlayerAttack : MonoBehaviour
     animator.SetInteger(attackHash, 0);
   }
 
-  void AttackMonster()
+  /// <summary>
+  /// 选择角色当前BUFF
+  /// </summary>
+  void SelectBuff(float monsterHP)
   {
     var playerBuff = GetComponentInChildren<InventoryUI>().CBuff;
     Debug.Log("Player_BUFF: " + playerBuff);
@@ -77,19 +77,17 @@ public class PlayerAttack : MonoBehaviour
     var monsterBuff = InventoryUI.BUFF.Fire;
     Debug.Log("Monster_BUFF: " + monsterBuff);
 
-    var monsterHP = Monster.GetComponentInChildren<MonsterHpBar>().MonsterHP;
-
     switch (monsterBuff)
     {
       case InventoryUI.BUFF.Fire:
         if (playerBuff == InventoryUI.BUFF.Grass)
         {
-          hurt -= monsterHP * 0.05f;
+          hurt -= monsterHP * hurtbuff;
         }
 
         if (playerBuff == InventoryUI.BUFF.Water)
         {
-          hurt += monsterHP * 0.06f;
+          hurt += monsterHP * hurtdebuff;
         }
 
         break;
@@ -97,12 +95,12 @@ public class PlayerAttack : MonoBehaviour
       case InventoryUI.BUFF.Grass:
         if (playerBuff == InventoryUI.BUFF.Fire)
         {
-          hurt += monsterHP * 0.06f;
+          hurt += monsterHP * hurtdebuff;
         }
 
         if (playerBuff == InventoryUI.BUFF.Water)
         {
-          hurt -= monsterHP * 0.05f;
+          hurt -= monsterHP * hurtbuff;
         }
 
         break;
@@ -110,60 +108,50 @@ public class PlayerAttack : MonoBehaviour
       case InventoryUI.BUFF.Water:
         if (playerBuff == InventoryUI.BUFF.Fire)
         {
-          hurt -= monsterHP * 0.05f;
+          hurt -= monsterHP * hurtbuff;
         }
 
         if (playerBuff == InventoryUI.BUFF.Grass)
         {
-          hurt += monsterHP * 0.06f;
+          hurt += monsterHP * hurtdebuff;
         }
 
         break;
       default:
         break;
     }
-
-    // 血量移除
-    Monster.GetComponentInChildren<MonsterHpBar>().MonsterHP -= hurt;
   }
 
-  private void OnCollisionEnter(Collision other)
+  /// <summary>
+  /// 选择当前可攻击的怪物
+  /// </summary>
+  private void SelectMonster()
   {
-    if (other.gameObject.CompareTag("Monster"))
+    // 获取所有怪物
+    GameObject[] monster = GameObject.FindGameObjectsWithTag("Monster");
+    List<GameObject> monsterList = new List<GameObject>();
+    // 把在攻击范围里面的怪物放入列表
+    foreach (var item in monster)
     {
-      Monster = other.gameObject;
-      Debug.Log("OnCollisionEnter: " + Monster.name);
-      haveMonster = true;
+      float distance = Vector3.Distance(transform.position, item.transform.position);
+      float angle = Vector3.Angle(transform.forward, item.transform.position - transform.position);
+      if (distance < attackDistance && angle < attackRadius)
+      {
+        monsterList.Add(item);
+      }
     }
-  }
 
-  private void OnCollisionExit(Collision other)
-  {
-    if (other.gameObject.CompareTag("Monster"))
+    foreach (var item in monsterList)
     {
-      Monster = null;
-      Debug.Log("OnCollisionExit: " + other.gameObject.name);
-      haveMonster = false;
-    }
-  }
+      // 添加BUFF
+      var monsterHP = item.GetComponentInChildren<MonsterHpBar>().MonsterHP;
+      SelectBuff(monsterHP);
 
-  private void OnTriggerEnter(Collider other)
-  {
-    if (other.gameObject.CompareTag("Monster"))
-    {
-      Monster = other.gameObject;
-      Debug.Log("OnTriggerEnter: " + Monster.name);
-      haveMonster = true;
-    }
-  }
+      // 血量移除
+      item.GetComponentInChildren<MonsterHpBar>().MonsterHP -= hurt;
 
-  private void OnTriggerExit(Collider other)
-  {
-    if (other.gameObject.CompareTag("Monster"))
-    {
-      Monster = null;
-      Debug.Log("OnTriggerExit: " + other.gameObject.name);
-      haveMonster = false;
+      Debug.Log("Hurt:" + hurt);
+      Debug.Log("MonsterHP:" + monsterHP);
     }
   }
 }
