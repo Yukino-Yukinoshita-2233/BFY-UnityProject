@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Game.Constants;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -74,44 +75,44 @@ public class PlayerAttack : MonoBehaviour
     var playerBuff = GetComponentInChildren<InventoryUI>().CBuff;
     Debug.Log("Player_BUFF: " + playerBuff);
 
-    var monsterBuff = InventoryUI.BUFF.Fire;
+    var monsterBuff = BUFF.Fire;
     Debug.Log("Monster_BUFF: " + monsterBuff);
 
     switch (monsterBuff)
     {
-      case InventoryUI.BUFF.Fire:
-        if (playerBuff == InventoryUI.BUFF.Grass)
+      case BUFF.Fire:
+        if (playerBuff == BUFF.Grass)
         {
           hurt -= monsterHP * hurtbuff;
         }
 
-        if (playerBuff == InventoryUI.BUFF.Water)
+        if (playerBuff == BUFF.Water)
         {
           hurt += monsterHP * hurtdebuff;
         }
 
         break;
 
-      case InventoryUI.BUFF.Grass:
-        if (playerBuff == InventoryUI.BUFF.Fire)
+      case BUFF.Grass:
+        if (playerBuff == BUFF.Fire)
         {
           hurt += monsterHP * hurtdebuff;
         }
 
-        if (playerBuff == InventoryUI.BUFF.Water)
+        if (playerBuff == BUFF.Water)
         {
           hurt -= monsterHP * hurtbuff;
         }
 
         break;
 
-      case InventoryUI.BUFF.Water:
-        if (playerBuff == InventoryUI.BUFF.Fire)
+      case BUFF.Water:
+        if (playerBuff == BUFF.Fire)
         {
           hurt -= monsterHP * hurtbuff;
         }
 
-        if (playerBuff == InventoryUI.BUFF.Grass)
+        if (playerBuff == BUFF.Grass)
         {
           hurt += monsterHP * hurtdebuff;
         }
