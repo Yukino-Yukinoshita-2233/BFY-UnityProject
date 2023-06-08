@@ -27,8 +27,9 @@ public class MonsterAIControl : MonoBehaviour
     float Monster_RatationSpeed = 200f;
     float Monster_WalkSpeed = 1f;
     float Monster_RunSpeed = 2f;
-    int Monster_Life = 1;
-    int StateNum;
+    float Monster_Gravity = -0.98f;
+    Vector3 Gravity;
+
     bool isRevolve = false;
     MonsterState nowMonsterState;
     MonsterPatrolState nowMonsterPatrolState;
@@ -56,15 +57,18 @@ public class MonsterAIControl : MonoBehaviour
 
     void Update()
     {
+        Gravity = new Vector3(0, Monster_Gravity, 0);
+        Monster_CharacterController.Move(transform.rotation * Gravity * Time.deltaTime);
+
         UpdateState();
     }
     void UpdateState()
     {
         FindPlayer();
-        Monster_RevolveState();
         switch (nowMonsterState)
         {
             case MonsterState.Patrol:
+                Monster_RevolveState();
                 Monster_Patrol();
                 break;
             case MonsterState.Track:
@@ -143,7 +147,7 @@ public class MonsterAIControl : MonoBehaviour
         {
             //Debug.Log("Monster_RevolveState");
 
-            Quaternion rotate = Quaternion.Euler(0, Random.Range(1, 5) * 90, 0);
+            Quaternion rotate = Quaternion.Euler(0, Random.Range(-365, 366), 0);
             Monster_Transform.rotation = Quaternion.Slerp(transform.rotation, rotate, Time.deltaTime * 1000);
             isRevolve = false;
         }
@@ -157,23 +161,24 @@ public class MonsterAIControl : MonoBehaviour
     void Monster_WalkState()
     {
         //Debug.Log("Monster_WalkState");
-        Vector3 dir = new Vector3(0, 0, 1f);
-        Monster_CharacterController.Move(transform.rotation * dir * Monster_WalkSpeed * Time.deltaTime);
+        Vector3 dir = new Vector3(0, 0, Monster_WalkSpeed);
+        Monster_CharacterController.Move(transform.rotation * dir * Time.deltaTime);
         SetAnimationStates(false, true, false, false);
     }
     void Monster_RunState()
     {
         //Debug.Log("Monster_RunState");
-        Vector3 dir = new Vector3(0, 0, 1f);
-        Monster_CharacterController.Move(transform.rotation * dir * Monster_RunSpeed * Time.deltaTime);
+        Vector3 dir = new Vector3(0, 0, Monster_RunSpeed);
+        Monster_CharacterController.Move(transform.rotation * dir * Time.deltaTime);
         SetAnimationStates(false, false, true, false);
     }
     void Monster_TrackState()
     {
-        //Debug.Log("Monster_TrackState");
-        Monster_Transform.LookAt(Player_Transform);
-        Vector3 dir = new Vector3(0, 0, 1f);
-        Monster_CharacterController.Move(transform.rotation * dir * Monster_RunSpeed * Time.deltaTime);
+        ////Debug.Log("Monster_TrackState");
+        //Monster_Transform.LookAt(Player_Transform.position);
+        Monster_Transform.LookAt(new Vector3(Player_Transform.position.x, Monster_Transform.position.y, Player_Transform.position.z));
+        Vector3 dir = new Vector3(0, 0, Monster_RunSpeed);
+        Monster_CharacterController.Move(transform.rotation * dir * Time.deltaTime);
         SetAnimationStates(false, false, false, true);
     }
     void Monster_Attack()
