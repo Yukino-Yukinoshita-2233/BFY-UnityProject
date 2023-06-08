@@ -54,7 +54,7 @@ public class MonsterAIControl : MonoBehaviour
         nowMonsterState = MonsterState.Patrol;
         nowMonsterPatrolState = MonsterPatrolState.Patrol_Idem;
     }
-
+    //
     void Update()
     {
         Gravity = new Vector3(0, Monster_Gravity, 0);
