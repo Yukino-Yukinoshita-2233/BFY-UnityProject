@@ -11,9 +11,8 @@ public class PlayerAttack : MonoBehaviour
   private float hurt = 10f; // 平A基础伤害
   private float hurtbuff = 0.06f; // 平A加成
   private float hurtdebuff = 0.05f; // 平A削减
-  private float attackDistance = 30f; // 平A距离
-  private float attackRadius = 20f; // 平A范围
-  private bool haveMonster = false;
+  private float attackDistance = 8f; // 平A距离
+  private float attackRadius = 10f; // 平A范围
 
   void Start()
   {
@@ -70,12 +69,10 @@ public class PlayerAttack : MonoBehaviour
   /// <summary>
   /// 选择角色当前BUFF
   /// </summary>
-  void SelectBuff(float monsterHP)
+  void SelectBuff(BUFF monsterBuff, float monsterHP)
   {
     var playerBuff = GetComponentInChildren<InventoryUI>().CBuff;
     Debug.Log("Player_BUFF: " + playerBuff);
-
-    var monsterBuff = BUFF.Fire;
     Debug.Log("Monster_BUFF: " + monsterBuff);
 
     switch (monsterBuff)
@@ -146,7 +143,8 @@ public class PlayerAttack : MonoBehaviour
     {
       // 添加BUFF
       var monsterHP = item.GetComponentInChildren<MonsterHp>().MonsterHP;
-      SelectBuff(monsterHP);
+      var monsterBuff = item.GetComponentInChildren<MonsterLevel>().buff;
+      SelectBuff(monsterBuff, monsterHP);
 
       // 血量移除
       item.GetComponentInChildren<MonsterHp>().MonsterHP -= hurt;

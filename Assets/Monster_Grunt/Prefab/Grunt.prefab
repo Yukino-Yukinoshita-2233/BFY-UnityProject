@@ -417,6 +417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ca8b8317fe9f94398623f271fa1f2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BOSS: {fileID: 1067925524328404, guid: 6bbfea6690ef7724ba495c866081f855, type: 3}
+  scaleFactor: 2
+  radius: 10
 --- !u!1 &3312486801664689943
 GameObject:
   m_ObjectHideFlags: 0
