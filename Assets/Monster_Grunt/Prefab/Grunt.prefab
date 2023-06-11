@@ -418,8 +418,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BOSS: {fileID: 1067925524328404, guid: 6bbfea6690ef7724ba495c866081f855, type: 3}
-  scaleFactor: 2
-  radius: 10
+  scaleFactor: 1.5
+  radius: 3.5
 --- !u!1 &3312486801664689943
 GameObject:
   m_ObjectHideFlags: 0

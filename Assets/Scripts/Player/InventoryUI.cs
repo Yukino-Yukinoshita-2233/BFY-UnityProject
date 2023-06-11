@@ -19,7 +19,7 @@ public class InventoryUI : MonoBehaviour
   int AttributeNum;
 
   public BUFF CBuff = BUFF.Water;
-  BUFF oldCBuff;
+  BUFF oldCBuff = BUFF.Water;
 
   private RawImage image; // 图片组件
   Color Color1 = new Color(1, 1, 1, 1); // 目标透明度值

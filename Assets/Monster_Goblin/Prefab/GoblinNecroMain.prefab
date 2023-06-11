@@ -1867,9 +1867,10 @@ GameObject:
   - component: {fileID: 4174507936242726674}
   - component: {fileID: 3397312666333202739}
   - component: {fileID: -3487038878112665835}
+  - component: {fileID: -5833690098326108600}
   m_Layer: 0
   m_Name: GoblinNecroMain
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1960,6 +1961,21 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!114 &-5833690098326108600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3097671887947498914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ca8b8317fe9f94398623f271fa1f2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BOSS: {fileID: 0}
+  scaleFactor: 1.5
+  radius: 3.5
 --- !u!1 &3097671887947498916
 GameObject:
   m_ObjectHideFlags: 0

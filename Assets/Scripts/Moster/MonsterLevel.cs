@@ -6,8 +6,8 @@ using Unity.Game.Constants;
 public class MonsterLevel : MonoBehaviour
 {
   public GameObject BOSS;
-  public float scaleFactor = 2.0f; // 缩放比例
-  public float radius = 10f; // 怪物为中心的半径怪物合成
+  public float scaleFactor = 1.5f; // 缩放比例
+  public float radius = 3.5f; // 怪物为中心的半径怪物合成
   public Level level { get; set; } = Level.Small;
   public BUFF buff { get; set; }
 
@@ -45,11 +45,15 @@ public class MonsterLevel : MonoBehaviour
     // 把在合成范围里面的怪物放入列表
     foreach (var item in monster)
     {
-      float distance = Vector3.Distance(transform.position, item.transform.position);
-      if (distance < radius)
+      if (gameObject.name != item.name)
       {
-        monsterList.Add(item);
-        break;
+        float distance = Vector3.Distance(transform.position, item.transform.position);
+        if (distance <= radius)
+        {
+          Debug.Log($"{gameObject.name} and {item.name} distance: {distance} radius: {radius}");
+          monsterList.Add(item);
+          break;
+        }
       }
     }
 
@@ -61,6 +65,7 @@ public class MonsterLevel : MonoBehaviour
         if (level == Level.Small && level == temp_level)
         {
           var monsterbuff = item.GetComponent<MonsterLevel>().buff;
+          Debug.Log($"{item.name} buff: {monsterbuff}");
           switch (monsterbuff)
           {
             case BUFF.Fire:
@@ -69,17 +74,20 @@ public class MonsterLevel : MonoBehaviour
                 // 怪物平A伤害增加
                 gameObject.GetComponent<MonsterAIControl>().hurt += 10f;
                 level = Level.Mid;
+                Debug.Log("Destroy: " + item.name);
                 DestroyImmediate(item);
               }
               else if (buff == BUFF.Grass)
               {
                 //草 怪物被消灭
-                DestroyImmediate(item);
+                Debug.Log("Destroy: " + gameObject.name);
+                DestroyImmediate(gameObject);
               }
               else if (buff == BUFF.Water)
               {
                 //火 怪物被消灭
-                DestroyImmediate(gameObject);
+                Debug.Log("Destroy: " + item.name);
+                DestroyImmediate(item);
               }
 
               break;
@@ -88,19 +96,23 @@ public class MonsterLevel : MonoBehaviour
               if (buff == BUFF.Fire)
               {
                 //草 怪物被消灭
-                DestroyImmediate(gameObject);
+                Debug.Log("Destroy: " + item.name);
+                DestroyImmediate(item);
               }
               else if (buff == BUFF.Grass)
               {
                 // 草 怪物体积增大
                 transform.localScale *= scaleFactor;
                 level = Level.Mid;
+                Debug.Log("scaleFactor: " + scaleFactor);
+                Debug.Log("Destroy: " + item.name);
                 DestroyImmediate(item);
               }
               else if (buff == BUFF.Water)
               {
                 //水 怪物被消灭
-                DestroyImmediate(item);
+                Debug.Log("Destroy: " + gameObject.name);
+                DestroyImmediate(gameObject);
               }
               break;
 
@@ -108,18 +120,21 @@ public class MonsterLevel : MonoBehaviour
               if (buff == BUFF.Fire)
               {
                 //火 怪物被消灭
-                DestroyImmediate(item);
+                Debug.Log("Destroy: " + gameObject.name);
+                DestroyImmediate(gameObject);
               }
               else if (buff == BUFF.Grass)
               {
-                // 水 怪物体积增大
-                DestroyImmediate(gameObject);
+                //水 怪物被消灭
+                Debug.Log("Destroy: " + item.name);
+                DestroyImmediate(item);
               }
               else if (buff == BUFF.Water)
               {
                 //水 怪物的生命力提升
                 gameObject.GetComponent<MonsterHp>().MonsterHP *= 2;
                 level = Level.Mid;
+                Debug.Log("Destroy: " + item.name);
                 DestroyImmediate(item);
               }
               break;

@@ -8,11 +8,12 @@ public class PlayerAttack : MonoBehaviour
   private Animator animator;
   private int attackHash;
   private bool isAttacking;
-  private float hurt = 10f; // 平A基础伤害
+  private float preparehurt = 10f; // 平A基础伤害
+  private float hurt = 0f; // 平A当前伤害
   private float hurtbuff = 0.06f; // 平A加成
   private float hurtdebuff = 0.05f; // 平A削减
-  private float attackDistance = 8f; // 平A距离
-  private float attackRadius = 10f; // 平A范围
+  private float attackDistance = 3.5f; // 平A距离
+  private float attackRadius = 8.5f; // 平A范围
 
   void Start()
   {
@@ -78,14 +79,17 @@ public class PlayerAttack : MonoBehaviour
     switch (monsterBuff)
     {
       case BUFF.Fire:
-        if (playerBuff == BUFF.Grass)
+        if (playerBuff == BUFF.Fire)
         {
-          hurt -= monsterHP * hurtbuff;
+          hurt = preparehurt;
         }
-
-        if (playerBuff == BUFF.Water)
+        else if (playerBuff == BUFF.Grass)
         {
-          hurt += monsterHP * hurtdebuff;
+          hurt = preparehurt - (monsterHP * hurtbuff);
+        }
+        else if (playerBuff == BUFF.Water)
+        {
+          hurt = preparehurt + (monsterHP * hurtdebuff);
         }
 
         break;
@@ -93,12 +97,15 @@ public class PlayerAttack : MonoBehaviour
       case BUFF.Grass:
         if (playerBuff == BUFF.Fire)
         {
-          hurt += monsterHP * hurtdebuff;
+          hurt = preparehurt + (monsterHP * hurtdebuff);
         }
-
-        if (playerBuff == BUFF.Water)
+        else if (playerBuff == BUFF.Grass)
         {
-          hurt -= monsterHP * hurtbuff;
+          hurt = preparehurt;
+        }
+        else if (playerBuff == BUFF.Water)
+        {
+          hurt = preparehurt - (monsterHP * hurtbuff);
         }
 
         break;
@@ -106,12 +113,15 @@ public class PlayerAttack : MonoBehaviour
       case BUFF.Water:
         if (playerBuff == BUFF.Fire)
         {
-          hurt -= monsterHP * hurtbuff;
+          hurt = preparehurt - (monsterHP * hurtbuff);
         }
-
-        if (playerBuff == BUFF.Grass)
+        else if (playerBuff == BUFF.Grass)
         {
-          hurt += monsterHP * hurtdebuff;
+          hurt = preparehurt + (monsterHP * hurtdebuff);
+        }
+        else if (playerBuff == BUFF.Water)
+        {
+          hurt = preparehurt;
         }
 
         break;
@@ -133,8 +143,9 @@ public class PlayerAttack : MonoBehaviour
     {
       float distance = Vector3.Distance(transform.position, item.transform.position);
       float angle = Vector3.Angle(transform.forward, item.transform.position - transform.position);
-      if (distance < attackDistance && angle < attackRadius)
+      if (distance <= attackDistance && angle <= attackRadius)
       {
+        Debug.Log($"Player and {item.name} distance: {distance}, angle: {angle}, attackDistance: {attackDistance}, attackRadius:{attackRadius}");
         monsterList.Add(item);
       }
     }
@@ -149,8 +160,8 @@ public class PlayerAttack : MonoBehaviour
       // 血量移除
       item.GetComponentInChildren<MonsterHp>().MonsterHP -= hurt;
 
-      Debug.Log("Hurt:" + hurt);
-      Debug.Log("MonsterHP:" + monsterHP);
+      Debug.Log($"Hurt {item.name}: {hurt}");
+      Debug.Log($"{item.name} HP: {monsterHP}");
     }
   }
 }
