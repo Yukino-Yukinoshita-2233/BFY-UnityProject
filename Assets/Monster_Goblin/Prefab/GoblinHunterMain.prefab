@@ -3275,7 +3275,7 @@ PrefabInstance:
     - target: {fileID: 6474663491939376806, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
       propertyPath: m_Texture
       value: 
-      objectReference: {fileID: 2800000, guid: 3109d62f7b5e283488df186576215aaf, type: 3}
+      objectReference: {fileID: 2800000, guid: 36bb6bac18dbf7e4286e87b5243678c3, type: 3}
     - target: {fileID: 6869311332498056568, guid: 17c04a4878596a7489017e8bfe818d46, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0.8
